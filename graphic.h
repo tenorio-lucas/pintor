@@ -10,7 +10,7 @@
 /*
     graphics.h
 
-    Interface das rotinas grÃƒÂ¡ficas utilizadas por
+    Interface das rotinas grÃ¡ficas utilizadas por
     main.c e 
 */
 

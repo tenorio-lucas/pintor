@@ -88,15 +88,21 @@ luminosidadePixel(Imagem *img, int col, int lin);
 Imagem *
 mallocImagem(int width, int height)
 {
-  Imagem *imagem;
-  
-  imagem = malloc(sizeof(Imagem));
+    Imagem *imagem;
+    int i;
 
-  imagem->pixel = malloc(width * sizeof(Pixel *));
-  for(int i = 0; i < width; i++){
-    imagem->pixel[i] = (Pixel *) malloc(height * sizeof(Pixel));
-  }
-  return imagem;
+    imagem = mallocSafe(sizeof(Imagem));
+
+
+    imagem->pixel = mallocSafe(height * sizeof(Pixel *));
+    for (i = 0; i < height; i++)
+    {
+      imagem->pixel[i] = mallocSafe(width * sizeof(Pixel));
+    }
+   
+
+    return imagem;
+     
 }
 
 
@@ -150,7 +156,16 @@ freeRegioes(CelRegiao *iniRegioes)
 void 
 copieImagem(Imagem *destino, Imagem *origem)
 {
-    AVISO(imagem: Vixe! Ainda nao fiz a funcao copieImagem.);
+    int i, j;
+
+    destino->height = origem->height;
+    destino->width = origem->width;
+
+    for(i = 0; i < destino->height; i++){
+      for(j = 0; j < destino->width; j++){
+        destino->pixel[i][j] = origem->pixel[i][j];
+      }
+    }
 }
 
 /*-------------------------------------------------------------
@@ -168,14 +183,9 @@ copieImagem(Imagem *destino, Imagem *origem)
 Pixel
 getPixel(Imagem *img, int col, int lin)
 {
-    /* 
-       O objetivo das linhas de codigo a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento 
-       do EP. Essas linhas deverao ser removidas depois que
-       a funcao estiver pronta.
-    */
     Pixel pixel; 
-    AVISO(imagem: Vixe! Ainda nao fiz a funcao getPixel.);
+
+    pixel = img->pixel[lin][col];
     return pixel;    
 }
 
@@ -318,18 +328,46 @@ repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin,
 static Bool
 pixelBorda(Imagem *img, int limiar, int col, int lin)
 {
-  double gx, gy;
+    Bool borda = FALSE;
+    double gx, gy;
 
-  gx = luminosidadePixel(img, (col + 1), (lin - 1)) + 2 * luminosidadePixel(img, (col + 1), (lin)) + luminosidadePixel(img, (col + 1), (lin + 1))
-    - luminosidadePixel(img, (col - 1), (lin - 1)) - 2 * luminosidadePixel(img, (col - 1), (lin)) - luminosidadePixel(img, (col - 1), (lin + 1));
-  
-  gy = luminosidadePixel(img, (col - 1), (lin + 1) + 2 * luminosidadePixel(img, (col), (lin + 1)) + luminosidadePixel(img, (col + 1), (lin + 1)))
-    - luminosidadePixel(img, (col - 1), (lin - 1) - 2 *luminosidadePixel(img, (col), (lin - 1)) - luminosidadePixel(img, (col + 1), (lin - 1)));
 
-  if( sqrt(gx * gx + gy * gy) > limiar)
-    return TRUE;
-  else
-    return FALSE; 
+    if(lin > 0 && col > 0){
+      gx = luminosidadePixel(img, col+1, lin-1) + 2 * luminosidadePixel(img, col+1, lin) + luminosidadePixel(img, col+1, lin+1)
+         - luminosidadePixel(img, col-1, lin-1) - 2 * luminosidadePixel(img, col-1, lin) - luminosidadePixel(img, col-1, lin+1);
+
+      gy = luminosidadePixel(img, col-1, lin+1) + 2 * luminosidadePixel(img, col, lin + 1) + luminosidadePixel(img, col+1, lin+1)
+         -luminosidadePixel(img, col-1, lin-1) - 2 * luminosidadePixel(img, col, lin-1) - luminosidadePixel(img, col + 1, lin-1);
+    }
+    else if(lin > 0){
+      gx = luminosidadePixel(img, col+1, lin-1) + 2 * luminosidadePixel(img, col+1, lin) + luminosidadePixel(img, col+1, lin+1)
+         - luminosidadePixel(img, col, lin-1) - 2 * luminosidadePixel(img, col, lin) - luminosidadePixel(img, col, lin+1);
+
+      gy = luminosidadePixel(img, col, lin+1) + 2 * luminosidadePixel(img, col, lin + 1) + luminosidadePixel(img, col+1, lin+1)
+         -luminosidadePixel(img, col, lin-1) - 2 * luminosidadePixel(img, col, lin-1) - luminosidadePixel(img, col + 1, lin-1);
+    }
+    else if(col > 0){
+      gx = luminosidadePixel(img, col+1, lin) + 2 * luminosidadePixel(img, col+1, lin) + luminosidadePixel(img, col+1, lin+1)
+         - luminosidadePixel(img, col-1, lin) - 2 * luminosidadePixel(img, col-1, lin) - luminosidadePixel(img, col-1, lin+1);
+
+      gy = luminosidadePixel(img, col-1, lin+1) + 2 * luminosidadePixel(img, col, lin + 1) + luminosidadePixel(img, col+1, lin+1)
+         -luminosidadePixel(img, col-1, lin) - 2 * luminosidadePixel(img, col, lin) - luminosidadePixel(img, col + 1, lin);
+    }
+    else{
+      gx = luminosidadePixel(img, col+1, lin) + 2 * luminosidadePixel(img, col+1, lin) + luminosidadePixel(img, col+1, lin+1)
+         - luminosidadePixel(img, col, lin) - 2 * luminosidadePixel(img, col, lin) - luminosidadePixel(img, col, lin+1);
+
+      gy = luminosidadePixel(img, col, lin+1) + 2 * luminosidadePixel(img, col, lin + 1) + luminosidadePixel(img, col+1, lin+1)
+         -luminosidadePixel(img, col, lin) - 2 * luminosidadePixel(img, col, lin) - luminosidadePixel(img, col + 1, lin);
+
+    if(sqrt(gx * gx + gy * gy) > limiar)
+      borda = TRUE;
+
+    }
+
+
+
+    return borda; 
 }
 
 /*-------------------------------------------------------------
@@ -341,7 +379,7 @@ pixelBorda(Imagem *img, int limiar, int col, int lin)
   A funcao retorna um ponteiro para o inicio de uma lista
   de regioes da imagem (em relacao ao valor LIMIAR). 
 
-  Cada pixel da imagem deve pertencem a uma, e so uma,
+  Cada pixel da imagem deve pertencer a uma, e so uma,
   regiao. Essas regioes constituem o que se chama de uma
   _segmentacao_ da imagem.
 
@@ -422,10 +460,10 @@ pixelBorda(Imagem *img, int limiar, int col, int lin)
 CelRegiao *
 segmenteImagem(Imagem *img, int limiar)
 {
-    /* O objetivo do return a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento do EP. 
-       Esse return devera ser removido depois que a funcao estiver pronta.
-    */
+  int i, j;
+  CelRegiao *lista;
+
+
     AVISO(imagem: Vixe! Ainda nao fiz a funcao segmenteImagem.);
     return NULL; 
 }
@@ -548,11 +586,23 @@ segmenteImagem(Imagem *img, int limiar)
 static int
 pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
 {
-    /* O objetivo do return a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento 
-       do EP. Esse return devera ser removido depois que
-       a funcao estiver pronta.
-    */
+    if(pixelBorda(img, limiar, lin, col) == TRUE){
+      pixelsRegiao(img, limiar, lin+1, col+1);
+      pixelsRegiao(img, limiar, lin+1, col);
+      pixelsRegiao(img, limiar, lin, col+1);
+      pixelsRegiao(img, limiar, lin+1, col-1);
+      pixelsRegiao(img, limiar, lin-1, col+1);
+      pixelsRegiao(img, limiar, lin-1, col);
+      pixelsRegiao(img, limiar, lin, col-1);
+      pixelsRegiao(img, limiar, lin-1, col-1);
+    }
+    else{
+      pixelsRegiao(img, limiar, lin+1, col);
+      pixelsRegiao(img, limiar, lin, col+1);
+      pixelsRegiao(img, limiar, lin-1, col);
+      pixelsRegiao(img, limiar, lin, col-1);
+    }
+
     AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
     return 0;
 }

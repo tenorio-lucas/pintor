@@ -112,7 +112,7 @@ myInit(int *argc, char *argv[], Imagem *tela, Imagem *imgOriginal,
     glutCreateWindow ("EP2 MAC0121 2019");
 
     /* 
-     * registre as funÃ§Ãµes de callback 
+     * registre as funções de callback 
      */
     glutKeyboardFunc(myKeyboard);
     glutReshapeFunc (myReshape);
@@ -297,7 +297,7 @@ myKeyboard (unsigned char key, int mx, int my)
         break;
     }
 
-    if (key != '\n') /* este if evita que a mensagem fique "soluÃ§ando"... */
+    if (key != '\n') /* este if evita que a mensagem fique "soluçando"... */
     { 
         mostreUso();
     }
@@ -436,3 +436,4 @@ copiePonteirosRegiao(Imagem *destino, Imagem *origem)
 
 
 #undef _GRAPHIC_C
+

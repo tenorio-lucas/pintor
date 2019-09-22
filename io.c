@@ -256,3 +256,4 @@ carregueImagemPPM(char *nomeArquivo)
 
     return img;
 }
+
