@@ -60,12 +60,13 @@ mostreUso(char *nomePrograma);
 int 
 main(int argc, char *argv[])
 {
+
     Imagem *imgOriginal   = NULL; /* ponteiro para a imagem original */
     Imagem *tela          = NULL; /* ponteiro para a imagem corrente ou atual */
     CelRegiao *iniRegioes = NULL; /* ponteiro para a lista de regioes */
 
     char nome_arq[20];
-    double width, height;
+
     int i;
 
 
@@ -78,7 +79,7 @@ main(int argc, char *argv[])
     
     imgOriginal = carregueImagemPPM(nome_arq);
     
-
+    printf("ooooooooooooooooooooooooo");
 
     if (imgOriginal == NULL) 
     {
@@ -87,8 +88,8 @@ main(int argc, char *argv[])
     }
   
     /* 3 crie a imagem corrente (tela) em que trabalharemos */
-
-    imgOriginal = mallocImagem(width, height);
+printf("ooooooooooooooooooooooooo");
+     tela = mallocImagem(imgOriginal->width, imgOriginal->height);
 
     /* 4 copie a imagem original (lida) para a imagem corrente (tela) */ 
 

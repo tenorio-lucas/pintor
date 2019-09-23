@@ -98,11 +98,11 @@ graveImagemPPM(char *nomeArquivo, Imagem *img)
     for (h = 0; h < img->height; h++)
     {
         for (w = 0; w < img->width; w++)
-	{ 
+  { 
             Byte red   = img->pixel[h][w].cor[RED]   ; /* intens. vermelho */
             Byte green = img->pixel[h][w].cor[GREEN] ; /* intens. verde    */
             Byte blue  = img->pixel[h][w].cor[BLUE]  ; /* intens. azul     */
-	  
+    
             fprintf(fSaida, "%c%c%c", red, green, blue);
 
 #ifdef DEBUG_COR
@@ -111,7 +111,7 @@ graveImagemPPM(char *nomeArquivo, Imagem *img)
                         w, h, red, green, blue);
 #endif
 
-	}
+  }
     }
 
     fclose(fSaida);
@@ -219,15 +219,15 @@ carregueImagemPPM(char *nomeArquivo)
     for (h = 0; h < img->height; h++)
     {
         for (w = 0; w < img->width; w++)
-	{ 
+  { 
             Byte red, green, blue;
 
             if (fscanf(fEntrada, "%c%c%c", &red, &green, &blue) != 3)
-	    {
+      {
                 fprintf(stderr, "ERRO! problema na leitura (pixel [%d][%d])\n", h, w);
                 freeImagem(img);
                 exit(EXIT_FAILURE);
-	    }
+      }
 
             img->pixel[h][w].cor[RED]   =  red   ; /* intensidade vermelho */
             img->pixel[h][w].cor[GREEN] =  green ; /* intensidade verde */
@@ -246,7 +246,7 @@ carregueImagemPPM(char *nomeArquivo)
                     img->pixel[h][w].cor[GREEN], 
                     img->pixel[h][w].cor[BLUE]);
 #endif
-	}
+  }
     }
 
     fclose(fEntrada);
