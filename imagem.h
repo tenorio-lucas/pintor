@@ -108,7 +108,7 @@ struct imagem
 {
     int     width; /* no. de colunas (width/largura) da imagem em pixels */
     int    height; /* no. de linhas  (height/altura) da imagem em pixels */
-    Pixel **pixel; /* matriz height x width de pixels com os nÃ­veis RGB  */
+    Pixel **pixel; /* matriz height x width de pixels com os níveis RGB  */
 }; 
 
 /*

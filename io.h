@@ -1,4 +1,3 @@
-
 /* 
  * MAC0121 Algoritmos e Estruturas de Dados I
  */

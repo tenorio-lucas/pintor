@@ -27,3 +27,4 @@ io.o:   io.c io.h imagem.h
 
 clean:
 	$(RM) *~ *.o
+
